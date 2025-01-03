@@ -1,28 +1,14 @@
 import express from "express";
-import conectaNaDatabase from "./config/dbConnect.js";
-import routes from "./routes/index.js";
+import db from "./config/dbConnect.js"
+import routes from "./routes/index.js"
 
-const conexao = await conectaNaDatabase();
-
-conexao.on("error", (erro) => {
-    console.log("Erro ao conectar no MongoDB: " + erro);
-})
-
-conexao.once("open", () => {
-    console.log("Conectado no MongoDB");
+db.on("error", console.log.bind(console, 'Erro de conexão'))
+db.once("open", () => {
+  console.log('conexão com o banco feita com sucesso')
 })
 
 const app = express();
+app.use(express.json())
 routes(app);
 
-
-app.delete("/livros/:id", (req, res) => {
-    const index = buscaLivro(req.params.id);
-    livros.splice(index, 1);
-    res.status(200).send("Livro removido com sucesso");
-})
-
-export default app;
-
-
-// mongodb+srv://admin:<password>cluster0.yyoob.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+export default app
